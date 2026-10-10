@@ -329,14 +329,13 @@ body, html {
 
 #menu-bottom-controls {
     position: absolute;
-    bottom: 80px;
+    bottom: max(60px, env(safe-area-inset-bottom));
     display: flex;
     align-items: center;
     gap: 20px;
     opacity: 0;
     pointer-events: none;
     transform: translateY(30px);
-    transition: all 0.4s;
 }
 
 #btn-play {
@@ -383,10 +382,11 @@ body, html {
     animation: moveTitleUp 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 #main-menu.show-menu #menu-bottom-controls {
-    opacity: 1;
     pointer-events: auto;
-    transform: translateY(0);
-    transition-delay: 0.5s; 
+    animation: fadeUpBtns 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 0.5s;
+}
+@keyframes fadeUpBtns {
+    to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes moveLogoUp {

@@ -122,6 +122,8 @@ window.addEventListener('keydown', (e) => {
         if (!e.repeat) shoot();
         e.preventDefault();
     }
+});
+
 let moveTouchId = null;
 
 window.addEventListener('touchstart', (e) => {

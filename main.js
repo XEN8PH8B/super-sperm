@@ -105,8 +105,14 @@ function shoot() {
     }
 }
 
-shootBtnContainer.addEventListener('pointerdown', (e) => {
-    e.stopPropagation(); // Prevents moving player when pressing shoot
+shootBtnContainer.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    shoot();
+}, {passive: false});
+
+shootBtnContainer.addEventListener('mousedown', (e) => {
+    e.stopPropagation();
     shoot();
 });
 shootBtnContainer.addEventListener('contextmenu', e => e.preventDefault());
@@ -116,40 +122,54 @@ window.addEventListener('keydown', (e) => {
         if (!e.repeat) shoot();
         e.preventDefault();
     }
+let moveTouchId = null;
+
+window.addEventListener('touchstart', (e) => {
+    for (let i = 0; i < e.changedTouches.length; i++) {
+        let touch = e.changedTouches[i];
+        if (moveTouchId === null) {
+            moveTouchId = touch.identifier;
+            isPointerDown = true;
+            pointerX = touch.clientX;
+            pointerY = touch.clientY;
+        }
+    }
+}, {passive: false});
+
+window.addEventListener('touchmove', (e) => {
+    for (let i = 0; i < e.changedTouches.length; i++) {
+        let touch = e.changedTouches[i];
+        if (isPointerDown && touch.identifier === moveTouchId) {
+            pointerX = touch.clientX;
+            pointerY = touch.clientY;
+        }
+    }
+}, {passive: false});
+
+function handleTouchEnd(e) {
+    for (let i = 0; i < e.changedTouches.length; i++) {
+        if (e.changedTouches[i].identifier === moveTouchId) {
+            isPointerDown = false;
+            moveTouchId = null;
+        }
+    }
+}
+window.addEventListener('touchend', handleTouchEnd);
+window.addEventListener('touchcancel', handleTouchEnd);
+
+// Fallback for PC mouse
+window.addEventListener('mousedown', (e) => {
+    isPointerDown = true;
+    pointerX = e.clientX;
+    pointerY = e.clientY;
 });
-
-let movePointerId = null;
-
-// Handle both mouse and touch via Pointer Events
-window.addEventListener('pointerdown', (e) => {
-    if (movePointerId === null) {
-        movePointerId = e.pointerId;
-        isPointerDown = true;
+window.addEventListener('mousemove', (e) => {
+    if (isPointerDown) {
         pointerX = e.clientX;
         pointerY = e.clientY;
     }
 });
-
-window.addEventListener('pointermove', (e) => {
-    if (isPointerDown && e.pointerId === movePointerId) {
-        pointerX = e.clientX;
-        pointerY = e.clientY;
-    }
-});
-
-window.addEventListener('pointerup', (e) => {
-    if (e.pointerId === movePointerId) {
-        isPointerDown = false;
-        movePointerId = null;
-    }
-});
-
-window.addEventListener('pointercancel', (e) => {
-    if (e.pointerId === movePointerId) {
-        isPointerDown = false;
-        movePointerId = null;
-    }
-});
+window.addEventListener('mouseup', () => isPointerDown = false);
 
 let time = 0;
 
@@ -697,7 +717,11 @@ function restartGame() {
     lastCoinSpawn = Date.now();
 }
 
-document.getElementById('btn-restart').addEventListener('pointerdown', (e) => {
+document.getElementById('btn-restart').addEventListener('touchstart', (e) => {
+    e.stopPropagation();
+    restartGame();
+}, {passive: false});
+document.getElementById('btn-restart').addEventListener('mousedown', (e) => {
     e.stopPropagation();
     restartGame();
 });
@@ -725,17 +749,33 @@ function showMainMenu() {
     document.getElementById('pause-screen').classList.remove('visible');
 }
 
-document.getElementById('btn-menu').addEventListener('pointerdown', (e) => {
+document.getElementById('btn-menu').addEventListener('touchstart', (e) => {
+    e.stopPropagation();
+    showMainMenu();
+}, {passive: false});
+document.getElementById('btn-menu').addEventListener('mousedown', (e) => {
     e.stopPropagation();
     showMainMenu();
 });
-document.getElementById('btn-menu-pause').addEventListener('pointerdown', (e) => {
+document.getElementById('btn-menu-pause').addEventListener('touchstart', (e) => {
+    e.stopPropagation();
+    showMainMenu();
+}, {passive: false});
+document.getElementById('btn-menu-pause').addEventListener('mousedown', (e) => {
     e.stopPropagation();
     showMainMenu();
 });
 
-document.getElementById('btn-play').addEventListener('pointerdown', (e) => {
+document.getElementById('btn-play').addEventListener('touchstart', (e) => {
     e.stopPropagation();
+    startTransition();
+}, {passive: false});
+document.getElementById('btn-play').addEventListener('mousedown', (e) => {
+    e.stopPropagation();
+    startTransition();
+});
+
+function startTransition() {
     const menu = document.getElementById('main-menu');
     menu.classList.add('fade-out-zoom');
     
@@ -750,7 +790,7 @@ document.getElementById('btn-play').addEventListener('pointerdown', (e) => {
     
     GAME_START_TIME = Date.now();
     restartGame();
-});
+}
 
 // Profile Logic
 function formatTime(seconds) {
@@ -766,14 +806,26 @@ function updateProfileUI() {
     document.getElementById('stat-time').innerText = formatTime(bestTime);
 }
 
-document.getElementById('btn-profile').addEventListener('pointerdown', (e) => {
+document.getElementById('btn-profile').addEventListener('touchstart', (e) => {
+    e.stopPropagation();
+    updateProfileUI();
+    document.getElementById('main-menu').style.display = 'none';
+    document.getElementById('profile-screen').classList.add('visible');
+}, {passive: false});
+document.getElementById('btn-profile').addEventListener('mousedown', (e) => {
     e.stopPropagation();
     updateProfileUI();
     document.getElementById('main-menu').style.display = 'none';
     document.getElementById('profile-screen').classList.add('visible');
 });
 
-document.getElementById('btn-profile-back').addEventListener('pointerdown', (e) => {
+document.getElementById('btn-profile-back').addEventListener('touchstart', (e) => {
+    e.stopPropagation();
+    document.getElementById('profile-screen').classList.remove('visible');
+    const menu = document.getElementById('main-menu');
+    menu.style.display = 'flex';
+}, {passive: false});
+document.getElementById('btn-profile-back').addEventListener('mousedown', (e) => {
     e.stopPropagation();
     document.getElementById('profile-screen').classList.remove('visible');
     const menu = document.getElementById('main-menu');
@@ -802,7 +854,14 @@ document.getElementById('profile-name-input').addEventListener('input', function
     localStorage.setItem('userName', userName);
 });
 
-document.getElementById('pause-btn').addEventListener('pointerdown', (e) => {
+document.getElementById('pause-btn').addEventListener('touchstart', (e) => {
+    e.stopPropagation();
+    if (gameState === 'playing') {
+        gameState = 'paused';
+        document.getElementById('pause-screen').classList.add('visible');
+    }
+}, {passive: false});
+document.getElementById('pause-btn').addEventListener('mousedown', (e) => {
     e.stopPropagation();
     if (gameState === 'playing') {
         gameState = 'paused';
@@ -823,13 +882,22 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-document.getElementById('btn-continue').addEventListener('pointerdown', (e) => {
+document.getElementById('btn-continue').addEventListener('touchstart', (e) => {
+    e.stopPropagation();
+    gameState = 'playing';
+    document.getElementById('pause-screen').classList.remove('visible');
+}, {passive: false});
+document.getElementById('btn-continue').addEventListener('mousedown', (e) => {
     e.stopPropagation();
     gameState = 'playing';
     document.getElementById('pause-screen').classList.remove('visible');
 });
 
-document.getElementById('btn-restart-pause').addEventListener('pointerdown', (e) => {
+document.getElementById('btn-restart-pause').addEventListener('touchstart', (e) => {
+    e.stopPropagation();
+    restartGame();
+}, {passive: false});
+document.getElementById('btn-restart-pause').addEventListener('mousedown', (e) => {
     e.stopPropagation();
     restartGame();
 });

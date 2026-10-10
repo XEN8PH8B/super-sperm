@@ -173,8 +173,8 @@ body, html {
 
 #shoot-btn-container {
     position: absolute;
-    bottom: 40px;
-    right: 30px;
+    bottom: max(30px, env(safe-area-inset-bottom));
+    right: max(30px, env(safe-area-inset-right));
     width: 70px;
     height: 70px;
     border-radius: 50%;
@@ -202,8 +202,8 @@ body, html {
 
 #pause-btn {
     position: absolute;
-    top: 30px;
-    left: 30px;
+    top: max(20px, env(safe-area-inset-top));
+    left: max(20px, env(safe-area-inset-left));
     width: 45px;
     height: 45px;
     background: rgba(255, 255, 255, 0.2);
@@ -255,7 +255,9 @@ body, html {
     background: rgba(40, 10, 15, 0.65);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 20px;
-    padding: 40px;
+    padding: 30px 20px;
+    width: 90%;
+    max-width: 350px;
     text-align: center;
     color: white;
     box-shadow: 0 10px 40px rgba(0,0,0,0.6);
@@ -312,7 +314,7 @@ body, html {
 
 #game-title {
     font-family: 'Russo One', sans-serif;
-    font-size: 54px;
+    font-size: clamp(30px, 10vw, 54px);
     color: white;
     text-shadow: 0 5px 15px rgba(0,0,0,0.6), 0 0 30px #ff1493;
     margin-top: 25px;
@@ -341,11 +343,11 @@ body, html {
     position: relative;
     background: linear-gradient(135deg, #00b09b, #96c93d);
     border: 2px solid white;
-    padding: 18px 60px;
+    padding: 15px 40px;
     border-radius: 40px;
     color: white;
     font-family: 'Russo One', sans-serif;
-    font-size: 32px;
+    font-size: clamp(20px, 6vw, 32px);
     text-transform: uppercase;
     box-shadow: 0 10px 20px rgba(0,0,0,0.4), 0 0 30px rgba(150, 201, 61, 0.6);
     cursor: pointer;
@@ -412,7 +414,7 @@ body, html {
 
 /* Profile Panel Styles */
 .profile-panel {
-    width: 320px;
+    width: 100%;
     position: relative;
 }
 .profile-panel h2 {

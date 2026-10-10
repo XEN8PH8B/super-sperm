@@ -118,26 +118,37 @@ window.addEventListener('keydown', (e) => {
     }
 });
 
+let movePointerId = null;
+
 // Handle both mouse and touch via Pointer Events
 window.addEventListener('pointerdown', (e) => {
-    isPointerDown = true;
-    pointerX = e.clientX;
-    pointerY = e.clientY;
-});
-
-window.addEventListener('pointermove', (e) => {
-    if (isPointerDown) {
+    if (movePointerId === null) {
+        movePointerId = e.pointerId;
+        isPointerDown = true;
         pointerX = e.clientX;
         pointerY = e.clientY;
     }
 });
 
-window.addEventListener('pointerup', () => {
-    isPointerDown = false;
+window.addEventListener('pointermove', (e) => {
+    if (isPointerDown && e.pointerId === movePointerId) {
+        pointerX = e.clientX;
+        pointerY = e.clientY;
+    }
 });
 
-window.addEventListener('pointercancel', () => {
-    isPointerDown = false;
+window.addEventListener('pointerup', (e) => {
+    if (e.pointerId === movePointerId) {
+        isPointerDown = false;
+        movePointerId = null;
+    }
+});
+
+window.addEventListener('pointercancel', (e) => {
+    if (e.pointerId === movePointerId) {
+        isPointerDown = false;
+        movePointerId = null;
+    }
 });
 
 let time = 0;

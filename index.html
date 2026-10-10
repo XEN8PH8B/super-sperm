@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Sperm Game Prototype</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="logo.jpg">
+    <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="main-menu">
+        <div class="menu-content">
+            <img src="logo.jpg" id="main-logo" alt="Logo">
+            <h1 id="game-title">SUPER SPERM</h1>
+            <div id="menu-bottom-controls">
+                <button id="btn-shop" class="icon-btn">🛒</button>
+                <button id="btn-play">ИГРАТЬ</button>
+                <button id="btn-profile" class="icon-btn">👤</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="orientation-warning">
+        Пожалуйста, переверните устройство вертикально
+    </div>
+    
+    <div id="pause-btn">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    
+    <div id="hearts-container">
+        <div class="heart-slot"><div class="heart" id="heart-3"></div></div>
+        <div class="heart-slot"><div class="heart" id="heart-2"></div></div>
+        <div class="heart-slot"><div class="heart" id="heart-1"></div></div>
+    </div>
+    
+    <div id="coin-counter">
+        <div class="coin-icon"></div>
+        <span id="coin-text">0</span>
+    </div>
+    
+    <div id="game-over-screen" class="overlay-screen">
+        <div class="glass-panel">
+            <h1>ИГРА ОКОНЧЕНА</h1>
+            <div class="menu-buttons">
+                <button id="btn-restart">Рестарт</button>
+                <button id="btn-menu">Меню</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="pause-screen" class="overlay-screen">
+        <div class="glass-panel">
+            <h1>ПАУЗА</h1>
+            <div class="menu-buttons">
+                <button id="btn-continue">Продолжить</button>
+                <button id="btn-restart-pause">Рестарт</button>
+                <button id="btn-menu-pause">Меню</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="profile-screen" class="overlay-screen">
+        <div class="glass-panel profile-panel">
+            <button id="btn-profile-back">⬅ Назад</button>
+            <h2>Профиль</h2>
+            
+            <div class="profile-avatar-wrapper">
+                <img src="logo.jpg" id="profile-avatar-img" alt="Avatar">
+                <input type="file" id="avatar-upload" accept="image/*" style="display:none">
+                <button id="btn-edit-avatar">✏️</button>
+            </div>
+            
+            <div class="profile-name-wrapper">
+                <input type="text" id="profile-name-input" value="User123" maxlength="15">
+                <span>✏️</span>
+            </div>
+            
+            <div class="profile-stats">
+                <div class="stat-box">
+                    <span class="stat-label">Баланс монет</span>
+                    <span class="stat-value" id="stat-coins" style="color: #ffd700;">0</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">Лучшее время</span>
+                    <span class="stat-value" id="stat-time" style="color: #00d2ff;">00:00</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <canvas id="gameCanvas"></canvas>
+    <div id="shoot-btn-container">
+        <img id="shoot-btn" src="shoot_btn.jpg" alt="Shoot">
+    </div>
+    <script src="main.js"></script>
+</body>
+</html>
